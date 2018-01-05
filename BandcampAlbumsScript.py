@@ -40,7 +40,7 @@ def getFolderNames():
 # Function to extract all zip files into the target directory
 def extractAllZips():
     for file in FILES_TO_UNZIP:
-        print("Extracting " + file + " to '" + TARGET_DIR + "'")
+        print("Extracting '" + file + "' to '" + TARGET_DIR + "'")
         zFile = zipfile.ZipFile(file)
         folder = file.replace(".zip", "")
         zFile.extractall(TARGET_DIR + "\\" + folder)
@@ -52,7 +52,7 @@ def discardZips():
         try:
             shutil.move(zipPath, DISCARD_DIR)
         except shutil.Error:
-            print("ERROR: File " + file + " in discard folder already exists.")
+            print("ERROR: File '" + file + "' in discard folder already exists.")
             os.unlink(zipPath)
 
 # Open new windows for all new directories
@@ -79,5 +79,5 @@ if __name__ == "__main__":
     idZipFiles()            # Get names of all zips
     getFolderNames()        # Get folder names of zips without '.zip'
     extractAllZips()        # Extract zip files to target
-    discardZips()
+    discardZips()           # Moves all zip files in source to a discard folder
     openNewWindows()        # Use folder names to open separate windows
