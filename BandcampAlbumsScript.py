@@ -1,7 +1,8 @@
-import zipfile, os
+import zipfile, os, shutil
 
-SOURCE_DIR = ''
-TARGET_DIR = ''
+SOURCE_DIR = 'C:\\Users\\Matthew Kang\\Documents\\SOURCE'
+TARGET_DIR = 'C:\\Users\\Matthew Kang\\Documents\\TARGET'
+DISCARD_DIR = 'C:\\Users\\Matthew Kang\\Documents\\SOURCE\\Finished'
 FILES_TO_UNZIP = []
 UNZIPPED_FILES = []
 
@@ -22,18 +23,37 @@ def idZipFiles():
         if zipfile.is_zipfile(file):
             FILES_TO_UNZIP.append(file)
 
-# Just strips the '.zip' at the end of all files to get folder name, and adds it to array
+# Strips the '.zip' at the end of all files to get folder name, and adds it to array
+# Also has the responsibility of creating the new folders for files to go into
 def getFolderNames():
     for file in FILES_TO_UNZIP:
         folder = file.replace(".zip", "")
         UNZIPPED_FILES.append(folder)
+    for newFolder in UNZIPPED_FILES:
+        newFolderPath = TARGET_DIR + "\\" + newFolder
+        try:
+            os.makedirs(newFolderPath)
+        except FileExistsError:
+            print("ERROR: Directory at '" + newFolderPath +
+                  "' could not be created because it already exists.")
 
 # Function to extract all zip files into the target directory
 def extractAllZips():
     for file in FILES_TO_UNZIP:
         print("Extracting " + file + " to '" + TARGET_DIR + "'")
         zFile = zipfile.ZipFile(file)
-        zFile.extractall(TARGET_DIR)
+        folder = file.replace(".zip", "")
+        zFile.extractall(TARGET_DIR + "\\" + folder)
+
+# Moves zips into a folder for later removal (or checking)
+def discardZips():
+    for file in FILES_TO_UNZIP:
+        zipPath = os.path.abspath(file)
+        try:
+            shutil.move(zipPath, DISCARD_DIR)
+        except shutil.Error:
+            print("ERROR: File " + file + " in discard folder already exists.")
+            os.unlink(zipPath)
 
 # Open new windows for all new directories
 def openNewWindows():
@@ -44,8 +64,13 @@ def openNewWindows():
     except:
         print("ERROR: Unexpected error. (TARGET)")
     for folder in UNZIPPED_FILES:
-        fullPath = os.path.abspath(folder)
-        os.startfile(fullPath)
+        try:
+            fullPath = os.path.abspath(folder)
+            os.startfile(fullPath)
+        except FileNotFoundError:
+            print("ERROR: Unable to find folder in path '" + fullPath + "'.")
+        except:
+            print("ERROR: Unexpected error with opening new windows.")
 
 
 
@@ -54,4 +79,5 @@ if __name__ == "__main__":
     idZipFiles()            # Get names of all zips
     getFolderNames()        # Get folder names of zips without '.zip'
     extractAllZips()        # Extract zip files to target
+    discardZips()
     openNewWindows()        # Use folder names to open separate windows
