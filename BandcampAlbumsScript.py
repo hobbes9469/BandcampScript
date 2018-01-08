@@ -3,7 +3,7 @@ import zipfile, os, shutil
 
 SOURCE_DIR = 'C:\\Users\\Matthew Kang\\Documents\\SOURCE'
 TARGET_DIR = 'C:\\Users\\Matthew Kang\\Documents\\TARGET'
-DISCARD_DIR = 'C:\\Users\\Matthew Kang\\Documents\\SOURCE\\Finished'
+DISCARD_DIR = 'C:\\Users\\Matthew Kang\\Documents\\SOURCE\\DISCARD'
 FILES_TO_UNZIP = []
 UNZIPPED_FILES = []
 
