@@ -38,7 +38,7 @@ def openFolders():
 
 
 if __name__ == "__main__":
-    goToDir(DISCARD_DIR)
-    getFolderNames()
-    goToDir(TARGET_DIR)
-    openFolders()
+    goToDir(DISCARD_DIR)        # Go to discard directory
+    getFolderNames()            # Get the names of the folders to open in target directory
+    goToDir(TARGET_DIR)         # Go to target directory
+    openFolders()               # Open the folders
